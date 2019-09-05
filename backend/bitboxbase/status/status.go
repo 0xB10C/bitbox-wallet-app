@@ -52,4 +52,7 @@ const (
 
 	// EventVerificationProgressChange should be emitted whenever the rpcclient gets a new VerificationProgress notification
 	EventVerificationProgressChange Event = "verificationProgressChanged"
+
+	// EventDisconnect should be emitted whenever the BitBox base gets disconnected from the app
+	EventDisconnect Event = "disconnect"
 )
