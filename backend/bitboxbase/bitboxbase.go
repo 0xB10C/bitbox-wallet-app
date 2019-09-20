@@ -109,6 +109,9 @@ type Interface interface {
 
 	// RestoreHSMSecret restores the lightning hsm_secret
 	RestoreHSMSecret() error
+
+	// GetBaseVersion returns the version of the BitBox Base firmware
+	GetBaseVersion() (string, error)
 }
 
 // BitBoxBase provides the dictated bitboxbase api to communicate with the base
@@ -462,6 +465,22 @@ func (base *BitBoxBase) RestoreSysconfig() error {
 		return &reply
 	}
 	return nil
+}
+
+// GetBaseVersion returns the hostname of the bitboxbase
+func (base *BitBoxBase) GetBaseVersion() (hostname string, err error) {
+	if !base.active {
+		return "", errp.New("Attempted a call to non-active base")
+	}
+	base.log.Println("bitboxbase is making a GetBaseVersion call")
+	reply, err := base.rpcClient.GetBaseVersion()
+	if err != nil {
+		return "", err
+	}
+	if !reply.ErrorResponse.Success {
+		return "", reply.ErrorResponse
+	}
+	return reply.Version, nil
 }
 
 // Identifier implements a getter for the bitboxBase ID

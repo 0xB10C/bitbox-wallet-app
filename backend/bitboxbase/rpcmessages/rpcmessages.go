@@ -35,6 +35,11 @@ type SetHostnameArgs struct {
 	Hostname string
 }
 
+// SetRootPasswordArgs is a struct that holds the to be set root password
+type SetRootPasswordArgs struct {
+	RootPassword string
+}
+
 /*
 Put Response structs below this line. They should have the format of 'RPC Method Name' + 'Response'.
 */
@@ -57,6 +62,12 @@ type VerificationProgressResponse struct {
 	Blocks               int64   `json:"blocks"`
 	Headers              int64   `json:"headers"`
 	VerificationProgress float64 `json:"verificationProgress"`
+}
+
+// GetBaseVersionResponse is the struct that get sent by the rpc server during a GetBaseVersion rpc call
+type GetBaseVersionResponse struct {
+	ErrorResponse *ErrorResponse
+	Version       string
 }
 
 // GetHostnameResponse is the struct that get sent by the rpc server during a GetHostname rpc call

@@ -45,6 +45,7 @@ type Base interface {
 	BackupHSMSecret() error
 	RestoreSysconfig() error
 	RestoreHSMSecret() error
+	GetBaseVersion() (string, error)
 }
 
 // Handlers provides a web API to the Bitbox.
@@ -62,6 +63,7 @@ func NewHandlers(
 
 	handleFunc("/status", handlers.getStatusHandler).Methods("GET")
 	handleFunc("/gethostname", handlers.getHostnameHandler).Methods("GET")
+	handleFunc("/getbaseversion", handlers.getBaseVersionHandler).Methods("GET")
 	handleFunc("/channel-hash", handlers.getChannelHashHandler).Methods("GET")
 	handleFunc("/middlewareinfo", handlers.getMiddlewareInfoHandler).Methods("GET")
 	handleFunc("/verificationprogress", handlers.getVerificationProgressHandler).Methods("GET")
@@ -316,5 +318,17 @@ func (handlers *Handlers) postReindexBitcoinHandler(_ *http.Request) (interface{
 	}
 	return map[string]interface{}{
 		"success": true,
+	}, nil
+}
+
+func (handlers *Handlers) getBaseVersionHandler(_ *http.Request) (interface{}, error) {
+	handlers.log.Debug("getBaseVersionHandler")
+	version, err := handlers.base.GetBaseVersion()
+	if err != nil {
+		return bbBaseError(err, handlers.log), err
+	}
+	return map[string]interface{}{
+		"success": true,
+		"version": version,
 	}, nil
 }

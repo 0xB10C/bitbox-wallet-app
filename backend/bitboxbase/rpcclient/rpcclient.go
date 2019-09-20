@@ -349,3 +349,14 @@ func (rpcClient *RPCClient) RestoreHSMSecret() (rpcmessages.ErrorResponse, error
 	}
 	return reply, nil
 }
+
+// GetBaseVersion makes a synchronous rpc call to the base and returns a GetBaseVersionResponse containing the firmeware version of the BitBox Base.
+func (rpcClient *RPCClient) GetBaseVersion() (rpcmessages.GetBaseVersionResponse, error) {
+	rpcClient.log.Println("Executing GetBaseVersion rpc call")
+	var reply rpcmessages.GetBaseVersionResponse
+	err := rpcClient.client.Call("RPCServer.GetBaseVersion", true /*dummy Arg */, &reply)
+	if err != nil {
+		return rpcmessages.GetBaseVersionResponse{}, errp.WithStack(err)
+	}
+	return reply, nil
+}
